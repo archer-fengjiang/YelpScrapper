@@ -43,7 +43,7 @@ public class StressTest extends Thread{
 	public static void main(String[] args){
 		StressTest.url = "http://www.yelp.com/search?find_desc=&find_loc=New+York%2C+NY&ns=1#find_desc=restaurant&show_filters=1&start=80";
 		StressTest.threadsNum = 20;
-		StressTest.objectRequestNum = 500000;
+		StressTest.objectRequestNum = 500;
 		for(int i = 0; i < StressTest.threadsNum; i++){
 			StressTest test = new StressTest(i);
 			test.start();
