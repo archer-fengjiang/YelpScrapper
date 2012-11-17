@@ -30,22 +30,14 @@ public class StressTest extends Thread{
 	
 	public void run(){
 		while(StressTest.totalHttpRequestNum < StressTest.objectRequestNum){
-			boolean failed = true;
-			while(failed && StressTest.totalHttpRequestNum < StressTest.objectRequestNum){
-				String str;
-				try {
-					 str = BizListGetter.getNextPageBizList(StressTest.url);
-				} catch (IOException e) {
-					System.out.println("!!! " + this.threadID + " " + e.getMessage());
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e1) {}
-					continue;
-				}
-				failed = false;
-				int num = StressTest.incrementReuqestNum();
-				System.out.println(num + " " + this.threadID + " " + str);
+			String str;
+			try {
+				str = BizListGetter.getNextPageBizList(StressTest.url);
+			} catch (IOException e) {
+				break;
 			}
+			int num = StressTest.incrementReuqestNum();
+			System.out.println(num + " " + this.threadID + " " + str);
 		}
 	}
 	
