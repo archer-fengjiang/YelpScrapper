@@ -31,23 +31,28 @@ public class StressTest extends Thread{
 	public void run(){
 		while(StressTest.totalHttpRequestNum < StressTest.objectRequestNum){
 			boolean failed = true;
-			while(failed){
-			try {
-				
-				System.out.println(num + " " + this.threadID + " " +BizListGetter.getNextPageBizList(StressTest.url));
+			while(failed && StressTest.totalHttpRequestNum < StressTest.objectRequestNum){
+				String str;
+				try {
+					 str = BizListGetter.getNextPageBizList(StressTest.url);
+				} catch (IOException e) {
+					System.out.println("!!! " + this.threadID + " " + e.getMessage());
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e1) {}
+					continue;
+				}
 				failed = false;
 				int num = StressTest.incrementReuqestNum();
-			} catch (IOException e) {
-				System.out.println("!!! " + e.getMessage());
-			}
+				System.out.println(num + " " + this.threadID + " " + str);
 			}
 		}
 	}
 	
 	public static void main(String[] args){
 		StressTest.url = "http://www.yelp.com/search?find_desc=&find_loc=New+York%2C+NY&ns=1#find_desc=restaurant&show_filters=1&start=80";
-		StressTest.threadsNum = 200;
-		StressTest.objectRequestNum = 500;
+		StressTest.threadsNum = 50;
+		StressTest.objectRequestNum = 1000;
 		for(int i = 0; i < StressTest.threadsNum; i++){
 			StressTest test = new StressTest(i);
 			test.start();
