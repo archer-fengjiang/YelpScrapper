@@ -101,41 +101,35 @@ public class BizListGetter {
 	}
 	
 	/**
-	 * This method will get List of pages after this review page
-	 * the order of URL inside the list will be same as displayed on yelp
-	 * return empty list if next page doesn't exist
 	 * 
-	 * input:  url of current review page
-	 * return: ArrayLists of url of pages afte current pages
+	 * return null if next page doesn't exist
+	 * 
 	 * <div id="paginationControls">
 	 *     <span class="highlight2"> current page </span>
 	 *     <a href="biz/..."> ...
 	 * */
-	static List<String >reviewPageGetFollowingPages(Document doc){
-		List<String> list = new ArrayList<String>();
+	static String reviewPageGetNextPage(Document doc){
 		Element pagingControl = doc.getElementById("paginationControls");
 		if(pagingControl == null){
-			return list;
+			return null;
 		}
 		Element currentPage = pagingControl.select("span[class=highlight2]").first();
 		Element nextPage = currentPage.nextElementSibling();
-		while(nextPage != null){
-			list.add(nextPage.attr("abs:href"));
-			nextPage = nextPage.nextElementSibling();
+		if(nextPage == null){
+			return null;
 		}
-		return list;
+		return nextPage.attr("abs:href");
 	}
 	
 	public static void main(String[] args) throws IOException{
-		//testZeroReviewOnReviewPage();
-		//System.out.println();
-		//testMultiReviewsOnReviewPage();
-		testReviewPageWithoutNextPage();
-		
-		testReviewPageWithNextPage();
+		test5();
 	}
 	
-	private static void testZeroReviewOnReviewPage(){
+	
+	/**
+	 * Display review-rating pairs for page without such info
+	 * */
+	private static void test1(){
 		String url = "http://www.yelp.com/biz/poona-badminton-club-nyc-queens-2";
 		try {
 			Document doc = getDOM(url);
@@ -148,7 +142,10 @@ public class BizListGetter {
 		}
 	}
 	
-	private static void testMultiReviewsOnReviewPage(){
+	/**
+	 * Display review-rating pairs for page with reviews and next pages
+	 * */
+	private static void test2(){
 		String url = "http://www.yelp.com/biz/usa-badminton-sports-inc-college-point";
 		try {
 			Document doc = getDOM(url);
@@ -161,7 +158,10 @@ public class BizListGetter {
 		}
 	}
 	
-	private static void testNextPageWithoutNextPage(){
+	/**
+	 * Display Review-RatingPairs On Page Without Next Page
+	 * */
+	private static void test3(){
 		String url = "http://www.yelp.com/biz/usa-badminton-sports-inc-college-point";
 		try {
 			Document doc = getDOM(url);
@@ -174,23 +174,28 @@ public class BizListGetter {
 		}
 	}
 	
-	private static void testReviewPageWithoutNextPage() throws IOException{
+	/**
+	 * Display next page of review on page without next page, should show null
+	 * */
+	private static void test4() throws IOException{
 		String url = "http://www.yelp.com/biz/gramercy-tavern-new-york?start=880";
 		Document dom = getDOM(url);
-		List<String> nextPageURLList = reviewPageGetFollowingPages(dom);
-		System.out.println("for url:" + url + "\nnext page is:");
-		for(String str : nextPageURLList){
-			System.out.println("\t" + str);
-		}
+		String nextPageURL = reviewPageGetNextPage(dom);
+		System.out.println("for url:" + url + "\n next page is:" + nextPageURL);
 	}
 	
-	private static void testReviewPageWithNextPage() throws IOException{
-		String url = "http://www.yelp.com/biz/gramercy-tavern-new-york?start=400";
-		Document dom = getDOM(url);
-		List<String> nextPageURLList = reviewPageGetFollowingPages(dom);
-		System.out.println("for url:" + url + "\nnext page is:");
-		for(String str : nextPageURLList){
-			System.out.println("\t" + str);
+	/**
+	 * Display all review pages of one biz
+	 * */
+	private static void test5() throws IOException{
+		String url = "http://www.yelp.com/biz/ai-fiori-new-york";
+		System.out.println("for reivew page:" + url);
+		System.out.println("all reivew pages are:");
+		Document dom;
+		while(url != null){
+			dom = getDOM(url);
+			url = reviewPageGetNextPage(dom);
+			System.out.println(url);
 		}
 	}
 }
