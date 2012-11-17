@@ -34,7 +34,8 @@ public class StressTest extends Thread{
 			try {
 				str = BizListGetter.getNextPageBizList(StressTest.url);
 			} catch (IOException e) {
-				break;
+				System.out.println(e.getMessage());
+				continue;
 			}
 			int num = StressTest.incrementReuqestNum();
 			System.out.println(num + " " + this.threadID + " " + str);
@@ -42,13 +43,12 @@ public class StressTest extends Thread{
 	}
 	
 	public static void main(String[] args){
-		StressTest.url = "http://www.yelp.com/search?find_desc=&find_loc=New+York%2C+NY&ns=1#find_desc=restaurant&show_filters=1&start=80";
-		StressTest.threadsNum = 50;
-		StressTest.objectRequestNum = 1000;
+		StressTest.url = "http://www.yelp.com/nyc";
+		StressTest.threadsNum = 1;
+		StressTest.objectRequestNum = 200;
 		for(int i = 0; i < StressTest.threadsNum; i++){
 			StressTest test = new StressTest(i);
 			test.start();
 		}
 	}
-	
 }
