@@ -3,11 +3,12 @@ package org.cmu.fastcode.yelpscrapper;
 import com.google.gson.Gson;
 
 /**
- * TODO Put here a description of what this class does.
+ * This class is responsible for scraping review-rating pairs from www.yelp.com
+ * and restore them to file in json format
  *
  * @author Fengjiang.
  *         Created Nov 15, 2012.
  */
 public class YelpScrapper {
-	Gson gson = new Gson();
+	
 }
