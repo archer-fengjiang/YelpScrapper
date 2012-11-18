@@ -46,5 +46,6 @@ public class YelpScrapper {
 		for(String str : bizLinkList){
 			System.out.println(str);
 		}
+		
 	}
 }
