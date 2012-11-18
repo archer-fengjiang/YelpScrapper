@@ -1,15 +1,15 @@
 package org.cmu.fastcode.yelpscrapper;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import java.math.BigInteger;
 
 /**
  * This class is responsible for getting list of all business links
@@ -19,6 +19,8 @@ import org.jsoup.select.Elements;
  *         Created Nov 15, 2012.
  */
 public class BizListGetter {
+	
+	private static SecureRandom random = new SecureRandom();
 	
 	/**
 	 * This method is responsible for parsing HTML into DOM
@@ -30,7 +32,7 @@ public class BizListGetter {
 	static Document getDOM(String url) throws IOException{
 		return Jsoup
 				.connect(url)
-				.header("User-Agent","Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2")
+				//.header(new BigInteger(8, random).toString(),"Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20110316 Firefox/3.6.2")
 				.timeout(0)
 				.get();
 	}
@@ -204,7 +206,7 @@ public class BizListGetter {
 	 * */
 	private static void test6() throws IOException{
 //		String url = "http://www.yelp.com/search?find_desc=badminton+court&find_loc=San+Jose%2C+CA&ns=1";
-		String url = "http://www.yelp.com/search?find_desc=restaurants&find_loc=New+York%2C+NY&ns=1#start=50";
+		String url = "http://www.yelp.com/search?find_desc=restaurants&find_loc=New+York%2C+NY&ns=1";
 		System.out.println("for biz list page:" + url);
 		System.out.println("all biz list pages are:");
 		Document dom;
