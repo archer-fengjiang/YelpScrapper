@@ -63,7 +63,7 @@ public class BizListGetter {
 	static String bizPageGetNextPage(Document doc){
 		Element e = doc.getElementById("pager_page_next");
 		if(e != null){
-			return e.attr("abs:href").replaceFirst("attrs=&cflt=&","");
+			return e.attr("abs:href").replaceAll("attrs=&cflt=&","");
 		} else {
 			return null;
 		}
