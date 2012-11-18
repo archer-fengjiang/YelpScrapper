@@ -123,7 +123,7 @@ public class BizListGetter {
 	}
 	
 	public static void main(String[] args) throws IOException{
-		test6();
+		test8();
 	}
 	
 	
@@ -229,6 +229,22 @@ public class BizListGetter {
 		
 		for(String str : list){
 			System.out.println(str);
+		}
+	}
+	
+	/**
+	 * Display all review pages of one biz
+	 * @throws IOException 
+	 * */
+	private static void test8() throws IOException{
+		String url = "http://www.yelp.com/biz/gramercy-tavern-new-york";
+		System.out.println("for review page:" + url);
+		System.out.println("all review pages are:");
+		Document dom;
+		while(url != null){
+			dom = getDOM(url);
+			url = reviewPageGetNextPage(dom);
+			System.out.println(url);
 		}
 	}
 }
