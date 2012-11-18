@@ -20,18 +20,18 @@ import org.jsoup.select.Elements;
  *         Created Nov 15, 2012.
  */
 public class Util {
-	
+
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	
-	
+
+
 	/**
 	 * this method returns date string in [2012-11-18 13:21:28] format
 	 * */
 	public static String getCurrentDateString(){
 		return "[" + dateFormat.format(new Date()) + "]";
 	}
-	
-	
+
+
 	/**
 	 * This method is responsible for parsing HTML into DOM
 	 * So DOM could be reused
@@ -41,14 +41,14 @@ public class Util {
 	 * */
 	static Document getDOM(String url) throws IOException{
 		SecureRandom random = new SecureRandom();
-		
+
 		return Jsoup
-				.connect(url)
-				.header("User-Agent","Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2")
-				.timeout(0)
-				.get();
+		.connect(url)
+		.header("User-Agent","Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2")
+		.timeout(0)
+		.get();
 	}
-	
+
 	/**
 	 * This method is responsible for getting all biz lists for one
 	 * biz-list page
@@ -65,7 +65,7 @@ public class Util {
 		}
 		return bizLinkLists;
 	}
-	
+
 	/**
 	 * This method is responsible for getting next page displaying biz list
 	 * In case no next page is found, return null
@@ -81,7 +81,7 @@ public class Util {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * This method will take DOM of page displaying reviews for one biz
 	 * and return one list containing review-rating pairs
@@ -106,14 +106,18 @@ public class Util {
 		}
 		Elements reviews = doc.select("li[class=review clearfix  externalReview]");
 		for(Element review : reviews){
-			 String text = review.select("p[class=review_comment ieSucks]").first().text();
-			 String ratingStr = review.select("meta[itemprop=ratingValue]").first().attr("content");
-			 float rating = Float.parseFloat(ratingStr);
-			 list.add(new ReviewRatingPair(text, rating));
+			Elements textElements = review.select("p[class=review_comment ieSucks]");
+			if(textElements.size() == 0){
+				continue;  // very rare case: review doens't contain text!
+			}
+			String text = textElements.first().text();
+			String ratingStr = review.select("meta[itemprop=ratingValue]").first().attr("content");
+			float rating = Float.parseFloat(ratingStr);
+			list.add(new ReviewRatingPair(text, rating));
 		}
 		return list;
 	}
-	
+
 	/**
 	 * 
 	 * return null if next page doesn't exist
@@ -134,23 +138,23 @@ public class Util {
 		}
 		return nextPage.attr("abs:href");
 	}
-	
+
 	public static void main(String[] args) throws IOException{
-		test8();
+		test2();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
 	/********************Unit Tests****************************/
-	
+
 	/**
 	 * Display review-rating pairs for page without such info
 	 * */
@@ -166,12 +170,12 @@ public class Util {
 		} catch (IOException exception) {
 		}
 	}
-	
+
 	/**
 	 * Display review-rating pairs for page with reviews and next pages
 	 * */
 	private static void test2(){
-		String url = "http://www.yelp.com/biz/usa-badminton-sports-inc-college-point";
+		String url = "http://www.yelp.com/biz/gramercy-tavern-new-york?start=560";
 		try {
 			Document doc = getDOM(url);
 			List<ReviewRatingPair> list = reviewPageGetReviewRatingPairs(doc);
@@ -182,7 +186,7 @@ public class Util {
 		} catch (IOException exception) {
 		}
 	}
-	
+
 	/**
 	 * Display Review-RatingPairs On Page Without Next Page
 	 * */
@@ -198,7 +202,7 @@ public class Util {
 		} catch (IOException exception) {
 		}
 	}
-	
+
 	/**
 	 * Display next page of review on page without next page, should show null
 	 * */
@@ -208,7 +212,7 @@ public class Util {
 		String nextPageURL = reviewPageGetNextPage(dom);
 		System.out.println("for url:" + url + "\n next page is:" + nextPageURL);
 	}
-	
+
 	/**
 	 * Display all review pages of one biz
 	 * */
@@ -223,7 +227,7 @@ public class Util {
 			System.out.println(url);
 		}
 	}
-	
+
 	/**
 	 * Display all biz-list page links of one search
 	 * */
@@ -238,7 +242,7 @@ public class Util {
 			System.out.println(url);
 		}
 	}
-	
+
 	/**
 	 * Display all biz-links on one biz search result page
 	 * @throws IOException 
@@ -247,15 +251,15 @@ public class Util {
 		String url = "http://www.yelp.com/search?find_desc=restaurants&find_loc=New+York%2C+NY&ns=1#start=870";
 		System.out.println("for url:" + url);
 		System.out.println("All biz links are:");
-		
+
 		Document dom = getDOM(url);
 		List<String> list = BizListGetter.bizPageGetBizLinks(dom);
-		
+
 		for(String str : list){
 			System.out.println(str);
 		}
 	}
-	
+
 	/**
 	 * Display all review pages of one biz
 	 * @throws IOException 
