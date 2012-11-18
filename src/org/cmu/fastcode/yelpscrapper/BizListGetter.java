@@ -122,7 +122,7 @@ public class BizListGetter {
 	}
 	
 	public static void main(String[] args) throws IOException{
-		test5();
+		test6();
 	}
 	
 	
@@ -195,6 +195,21 @@ public class BizListGetter {
 		while(url != null){
 			dom = getDOM(url);
 			url = reviewPageGetNextPage(dom);
+			System.out.println(url);
+		}
+	}
+	
+	/**
+	 * Display all biz-list page links of one search
+	 * */
+	private static void test6() throws IOException{
+		String url = "http://www.yelp.com/search?find_desc=restaurants&find_loc=New+York%2C+NY&ns=1";
+		System.out.println("for biz list page:" + url);
+		System.out.println("all biz list pages are:");
+		Document dom;
+		while(url != null){
+			dom = getDOM(url);
+			url = bizPageGetNextPage(dom);
 			System.out.println(url);
 		}
 	}
