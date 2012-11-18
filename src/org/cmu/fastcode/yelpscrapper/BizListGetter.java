@@ -63,7 +63,7 @@ public class BizListGetter {
 	static String bizPageGetNextPage(Document doc){
 		Element e = doc.getElementById("pager_page_next");
 		if(e != null){
-			return e.attr("abs:href");
+			return e.attr("abs:href").replaceFirst("attrs=&cflt=&","");
 		} else {
 			return null;
 		}
@@ -204,8 +204,7 @@ public class BizListGetter {
 	 * Display all biz-list page links of one search
 	 * */
 	private static void test6() throws IOException{
-//		String url = "http://www.yelp.com/search?find_desc=badminton+court&find_loc=San+Jose%2C+CA&ns=1";
-		String url = "http://www.yelp.com/search?find_desc=restaurants&find_loc=New+York%2C+NY&ns=1#start=50";
+		String url = "http://www.yelp.com/search?find_desc=restaurants&find_loc=New+York%2C+NY&ns=1#start=870";
 		System.out.println("for biz list page:" + url);
 		System.out.println("all biz list pages are:");
 		Document dom;
@@ -213,6 +212,23 @@ public class BizListGetter {
 			dom = getDOM(url);
 			url = bizPageGetNextPage(dom);
 			System.out.println(url);
+		}
+	}
+	
+	/**
+	 * Display all biz-links on one biz search result page
+	 * @throws IOException 
+	 * */
+	private static void test7() throws IOException {
+		String url = "http://www.yelp.com/search?find_desc=restaurants&find_loc=New+York%2C+NY&ns=1#start=870";
+		System.out.println("for url:" + url);
+		System.out.println("All biz links are:");
+		
+		Document dom = getDOM(url);
+		List<String> list = BizListGetter.bizPageGetBizLinks(dom);
+		
+		for(String str : list){
+			System.out.println(str);
 		}
 	}
 }
