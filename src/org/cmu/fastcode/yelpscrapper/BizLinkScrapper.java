@@ -28,13 +28,10 @@ public class BizLinkScrapper {
 	 * @throws IOException if file IO has problem
 	 * */
 	private void writeBizLinks() throws IOException{
-		this.fileWriter = new BufferedWriter(new FileWriter(this.query + "[" + dateFormat.format(new Date()) + "]"));
+		this.fileWriter = new BufferedWriter(new FileWriter(this.query + Util.getCurrentDateString()));
 		String url = this.entryURL;
 		Document dom;
 		while(url != null){
-			// write URL of previous page
-			this.fileWriter.write(url + "\n");
-
 			// get DOM of next page
 			try {
 				dom = Util.getDOM(url);
@@ -44,6 +41,11 @@ public class BizLinkScrapper {
 				this.fileWriter.write("error");
 				this.fileWriter.close();
 				break;
+			}
+			// parse and write all biz links on this page
+			List<String> bizLinkList = Util.bizPageGetBizLinks(dom);
+			for(String bizLink : bizLinkList){
+				this.fileWriter.write(bizLink + "\n");
 			}
 			// parse URL of next page from DOM, if get null while loop stops
 			url = Util.bizPageGetNextPage(dom);

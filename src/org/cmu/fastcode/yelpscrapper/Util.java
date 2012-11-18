@@ -2,7 +2,9 @@ package org.cmu.fastcode.yelpscrapper;
 
 import java.io.IOException;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.jsoup.Jsoup;
@@ -18,6 +20,17 @@ import org.jsoup.select.Elements;
  *         Created Nov 15, 2012.
  */
 public class Util {
+	
+	private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
+	
+	/**
+	 * this method returns date string in [2012-11-18 13:21:28] format
+	 * */
+	public static String getCurrentDateString(){
+		return "[" + dateFormat.format(new Date()) + "]";
+	}
+	
 	
 	/**
 	 * This method is responsible for parsing HTML into DOM
