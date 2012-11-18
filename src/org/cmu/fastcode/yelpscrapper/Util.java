@@ -17,7 +17,7 @@ import org.jsoup.select.Elements;
  * @author Fengjiang.
  *         Created Nov 15, 2012.
  */
-public class BizListGetter {
+public class Util {
 	
 	/**
 	 * This method is responsible for parsing HTML into DOM
@@ -126,6 +126,17 @@ public class BizListGetter {
 		test8();
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/********************Unit Tests****************************/
 	
 	/**
 	 * Display review-rating pairs for page without such info
