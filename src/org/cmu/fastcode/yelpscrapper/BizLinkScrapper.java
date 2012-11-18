@@ -22,37 +22,44 @@ public class BizLinkScrapper {
 		this.query = query;
 	}
 	
-	private List<String> getBizLinks(){
-		try {
-			this.fileWriter = new BufferedWriter(new FileWriter(this.query + "[" + dateFormat.format(new Date()) + "]"));
-		} catch (IOException e1) {
-			
-		}
-		List<String> bizLinks = new ArrayList<String>();
+	
+	/**
+	 * This method will write all biz links associate with one query
+	 * @throws IOException if file IO has problem
+	 * */
+	private void writeBizLinks() throws IOException{
+		this.fileWriter = new BufferedWriter(new FileWriter(this.query + "[" + dateFormat.format(new Date()) + "]"));
 		String url = this.entryURL;
 		Document dom;
-		
 		while(url != null){
+			// write URL of previous page
+			this.fileWriter.write(url + "\n");
+
+			// get DOM of next page
 			try {
 				dom = Util.getDOM(url);
 			} catch (IOException e) {
-				System.out.println(e.getMessage());
+				// IOException from Fetching URL will stop the process
+				e.printStackTrace();
+				this.fileWriter.write("error");
+				this.fileWriter.close();
 				break;
 			}
-			bizLinks.addAll(BizListGetter.bizPageGetBizLinks(dom));
+			// parse URL of next page from DOM, if get null while loop stops
 			url = Util.bizPageGetNextPage(dom);
 		}
-		return bizLinks;
+		// complete fetching, flush writer and close if
+		this.fileWriter.close();
 	}
 	
 	
 	public static void main(String[] args){
 		BizLinkScrapper scrapper = new BizLinkScrapper("http://www.yelp.com/search?find_desc=restaurants&find_loc=New+York%2C+NY&ns=1"
 				, "restaurant_ny");
-		List<String> bizLinkList = scrapper.getBizLinks();
-		for(String str : bizLinkList){
-			System.out.println(str);
+		try {
+			scrapper.writeBizLinks();
+		} catch (IOException exception) {
+			exception.printStackTrace();
 		}
-		
 	}
 }
