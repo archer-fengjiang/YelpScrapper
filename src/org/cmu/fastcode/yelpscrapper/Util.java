@@ -106,11 +106,11 @@ public class Util {
 		}
 		Elements reviews = doc.select("li[class=review clearfix  externalReview]");
 		for(Element review : reviews){
-			Elements textElements = review.select("p[class=review_comment ieSucks]");
-			if(textElements.size() == 0){
+			Element textElement = review.select("p[class=review_comment ieSucks]").first();
+			if(textElement == null){
 				continue;  // very rare case: review doens't contain text!
 			}
-			String text = textElements.first().text();
+			String text = textElement.text();
 			String ratingStr = review.select("meta[itemprop=ratingValue]").first().attr("content");
 			float rating = Float.parseFloat(ratingStr);
 			list.add(new ReviewRatingPair(text, rating));
@@ -132,6 +132,9 @@ public class Util {
 			return null;
 		}
 		Element currentPage = pagingControl.select("span[class=highlight2]").first();
+		if(currentPage == null){
+			return null;
+		}
 		Element nextPage = currentPage.nextElementSibling();
 		if(nextPage == null){
 			return null;
@@ -140,7 +143,7 @@ public class Util {
 	}
 
 	public static void main(String[] args) throws IOException{
-		test2();
+		test4();
 	}
 
 
@@ -207,7 +210,8 @@ public class Util {
 	 * Display next page of review on page without next page, should show null
 	 * */
 	private static void test4() throws IOException{
-		String url = "http://www.yelp.com/biz/gramercy-tavern-new-york?start=880";
+//		String url = "http://www.yelp.com/biz/gramercy-tavern-new-york?start=880";
+		String url ="http://www.yelp.com/biz/le-restaurant-d-alex-new-york";
 		Document dom = getDOM(url);
 		String nextPageURL = reviewPageGetNextPage(dom);
 		System.out.println("for url:" + url + "\n next page is:" + nextPageURL);
