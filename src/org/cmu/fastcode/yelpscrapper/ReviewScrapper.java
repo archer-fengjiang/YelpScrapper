@@ -103,7 +103,7 @@ public class ReviewScrapper {
 	
 	
 	public static void main(String[] args){
-		ReviewScrapper scrapper = new ReviewScrapper("restaurant_ny[2012-11-18 16:23:52]");
+		ReviewScrapper scrapper = new ReviewScrapper("restaurant_sf[2012-11-19 00:38:04]");
 		try {
 			scrapper.writeReviews();
 		} catch (IOException exception) {

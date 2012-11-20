@@ -56,8 +56,8 @@ public class BizLinkScrapper {
 	
 	
 	public static void main(String[] args){
-		BizLinkScrapper scrapper = new BizLinkScrapper("http://www.yelp.com/search?find_desc=restaurants&find_loc=New+York%2C+NY&ns=1"
-				, "restaurant_ny");
+		BizLinkScrapper scrapper = new BizLinkScrapper("http://www.yelp.com/search?find_desc=restaurants&find_loc=San+Francisco%2C+CA&ns=1"
+				, "restaurant_sf");
 		try {
 			scrapper.writeBizLinks();
 		} catch (IOException exception) {

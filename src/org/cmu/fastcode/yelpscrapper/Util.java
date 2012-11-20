@@ -257,7 +257,7 @@ public class Util {
 		System.out.println("All biz links are:");
 
 		Document dom = getDOM(url);
-		List<String> list = BizListGetter.bizPageGetBizLinks(dom);
+		List<String> list = Util.bizPageGetBizLinks(dom);
 
 		for(String str : list){
 			System.out.println(str);
